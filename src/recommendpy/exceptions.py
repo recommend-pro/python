@@ -27,7 +27,7 @@ class RecommendAPIError(Exception):
                 self.error_code or self.response.status_code,
                 self.message or ''
             )
-        return self.message
+        return self.message or ''
 
     # python2
     def __unicode__(self):
@@ -36,7 +36,7 @@ class RecommendAPIError(Exception):
                 self.self.error_code or self.response.status_code,
                 self.message or ''
             )
-        return self.message
+        return self.message or ''
 
 
 class RecommendTokenError(RecommendAPIError):

@@ -15,12 +15,16 @@ class ContactAPI(BaseAPI):
     """Contact API."""
 
     @check_token
-    def search(self, emails=None, customer_ids=None, **kw):
+    def search(
+        self, emails=None, customer_ids=None, list_code=None, skip=None, **kw
+    ):
         r"""
         Search data of contact by specified field(s).
 
         :param emails: list of emails. Defaults to ``None``.
         :param customer_ids: list of customer_ids. Defaults to ``None``.
+        :param list_code: identifier of contact list. Defaults to ``None``.
+        :param skip: skip documents. Defaults to ``None``.
         :param \**kw: additional keyword arguments are passed to requests.
 
         :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
@@ -28,16 +32,23 @@ class ContactAPI(BaseAPI):
         :return: result of response.json().
         """
         # TODO: skip parameter
-        if not emails and not customer_ids:
-            raise RecommendAPIError('Please send emails or customer_ids')
+        if not emails and not customer_ids and not list_code:
+            raise RecommendAPIError(
+                'Please send emails or customer_ids or list_code'
+            )
         data = {}
+        params = {}
         if emails:
             data['emails'] = emails
         if customer_ids:
             data['customer_ids'] = customer_ids
+        if list_code:
+            data['list_code'] = list_code
+        if skip:
+            params['skip'] = skip
 
         return self._client.send(
-            'post', self.get_path(method='search'), **kw
+            'post', self.get_path(method='search'), data=data, params=params, **kw
         )
 
 
@@ -163,7 +174,8 @@ class ContactListAPI(CRUDAPI):
         if push_tokens:
             data['push_tokens'] = push_tokens
         return self._client.send(
-            'post', self.get_path(identifier=identifier, method='detach')
+            'post', self.get_path(identifier=identifier, method='detach'),
+            data=data
         )
 
     @check_token
