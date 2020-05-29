@@ -66,6 +66,8 @@ class RecommendAPI(object):
         if not token:
             token = self.get_token('auth')
         self.tokens['auth'] = token
+        if not token:
+            raise RecommendTokenError('Invalid or empty token')
 
         self.is_auth_token_setted = True
         self._session.headers.update({
@@ -142,8 +144,13 @@ class RecommendAPI(object):
         self.update_tokens(self.authenticate(key))
 
     def refresh_token(self, update_refresh_token=False):
+        refresh_token = self.get_token('refresh')
+        # force update refresh_token
+        if refresh_token.need_refresh:
+            update_refresh_token = True
         self.update_tokens(
             self.authenticate.refresh(
+                refresh_token=refresh_token,
                 update_refresh_token=update_refresh_token
             ),
             update_refresh_token=update_refresh_token
@@ -151,7 +158,7 @@ class RecommendAPI(object):
 
     def send(self, method, name, data=None, raw=False, **args):
         # args = {}
-        if data:
+        if data is not None:
             args['data'] = json.dumps(data)
 
         response = getattr(self._session, method)(

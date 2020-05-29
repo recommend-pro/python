@@ -16,7 +16,8 @@ class ContactAPI(BaseAPI):
 
     @check_token
     def search(
-        self, emails=None, customer_ids=None, list_code=None, skip=None, **kw
+        self, emails=None, customer_ids=None, list_code=None, skip=None,
+        limit=None, **kw
     ):
         r"""
         Search data of contact by specified field(s).
@@ -25,17 +26,13 @@ class ContactAPI(BaseAPI):
         :param customer_ids: list of customer_ids. Defaults to ``None``.
         :param list_code: identifier of contact list. Defaults to ``None``.
         :param skip: skip documents. Defaults to ``None``.
+        :param limit: Limit documents. Defaults to ``None``.
         :param \**kw: additional keyword arguments are passed to requests.
 
         :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
 
         :return: result of response.json().
         """
-        # TODO: skip parameter
-        if not emails and not customer_ids and not list_code:
-            raise RecommendAPIError(
-                'Please send emails or customer_ids or list_code'
-            )
         data = {}
         params = {}
         if emails:
@@ -46,9 +43,12 @@ class ContactAPI(BaseAPI):
             data['list_code'] = list_code
         if skip:
             params['skip'] = skip
+        if params:
+            params['limit'] = limit
 
         return self._client.send(
-            'post', self.get_path(method='search'), data=data, params=params, **kw
+            'post', self.get_path(method='search'), data=data, params=params,
+            **kw
         )
 
 

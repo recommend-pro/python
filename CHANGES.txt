@@ -1,3 +1,14 @@
+Release 0.0.3: May 29, 2020
+
+- add limit to search requests
+- add search_iterator to MessagingChannelEmailAPI
+- force update refresh_token
+
+Release 0.0.2: May 20, 2020
+
+- fix contact.list.detach
+- add list_code and skip parameters to contact.list.search
+
 
 Release 0.0.1: May 20, 2020
 
