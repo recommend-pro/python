@@ -88,22 +88,63 @@ class ContactBatchAPI(BaseAPI):
         )
 
 
-class ContactSegmentAPI(BaseAPI):
+class ContactSegmentAPI(CRUDAPI):
     """Contact segment API."""
 
     @check_token
-    def __call__(self, **kw):
+    def attach(self, identifier, field, identifiers, **kw):
         r"""
-        Return segments.
+        Attach identifiers to contact segment by specified identifier.
 
+        :param identifier: identifier of contact segment (required).
+        :param field: name of field to match by identifiers (required).
+            One of ['customer_id', 'email']
+        :param identifiers: list of identifiers (required).
         :param \**kw: additional keyword arguments are passed to requests.
 
         :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
 
         :return: result of response.json().
         """
+        if field not in ['customer_id', 'email']:
+            raise RecommendAPIError(
+                'Please send valid `field`'
+            )
+        data = {
+            'field': field,
+            'identifiers': identifiers,
+        }
         return self._client.send(
-            'get', self.get_path(), **kw
+            'post', self.get_path(identifier=identifier, method='attach'),
+            data=data
+        )
+
+    @check_token
+    def detach(self, identifier, field, identifiers, **kw):
+        r"""
+        Detach contacts from contact list by identifier.
+
+        :param identifier: identifier of contact segment (required).
+        :param field: name of field to match by identifiers (required).
+            One of ['customer_id', 'email']
+        :param identifiers: list of identifiers (required).
+        :param \**kw: additional keyword arguments are passed to requests.
+
+        :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
+
+        :return: result of response.json().
+        """
+        if field not in ['customer_id', 'email']:
+            raise RecommendAPIError(
+                'Please send valid `field`'
+            )
+        data = {
+            'field': field,
+            'identifiers': identifiers,
+        }
+        return self._client.send(
+            'post', self.get_path(identifier=identifier, method='detach'),
+            data=data
         )
 
 

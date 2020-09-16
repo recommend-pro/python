@@ -15,7 +15,7 @@ requires = [
 
 setup(
     name='recommendpy',
-    version='0.0.3',
+    version='0.0.4',
     description='recommendpy',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
