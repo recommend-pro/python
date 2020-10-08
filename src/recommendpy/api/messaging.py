@@ -134,11 +134,12 @@ class MessagingChannelEmailAPI(ReadAPI):
         limit = 3000
         while True:
             try:
-                data = self.search(skip=skip, limit=limit, **kw)
+                result = self.search(skip=skip, limit=limit, **kw)
 
                 failed_count = 0
+                if not isinstance(result, dict):
+                    raise RecommendAPIError('Empty result.')
 
-                result = data.get('result') or {}
                 for item in result.get('data', []):
                     yield item
                 limit = result.get('limit', 0)
