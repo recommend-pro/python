@@ -6,7 +6,7 @@ from ..exceptions import (
 )
 
 import logging
-log = logging.getLogger('recommend_api')
+log = logging.getLogger('recommendpy')
 
 
 def check_token(func):
@@ -62,7 +62,7 @@ class BaseAPI(object):
         if method:
             url.append(method)
         if custom and isinstance(custom, list):
-            url += list
+            url += custom
         elif custom:
             url.append(custom)
         return '/'.join(map(str, url))

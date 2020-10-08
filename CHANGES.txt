@@ -1,12 +1,24 @@
+Release 0.0.5: Oct 8, 2020
+
+- fix issue with token expiration in non-UTC system timezone
+- move all loggers to 'recommendpy'
+- fix ssl warning
+- add search to ContactSegment handler
+- fix issue with custom route
+- add some tests
+
+
 Release 0.0.4: Sep 16, 2020
 
 - add methods to ContactSegmentAPI
+
 
 Release 0.0.3: May 29, 2020
 
 - add limit to search requests
 - add search_iterator to MessagingChannelEmailAPI
 - force update refresh_token
+
 
 Release 0.0.2: May 20, 2020
 

@@ -1,26 +1,31 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 # from ...models.settings import SystemSettings
 from .exceptions import RecommendTokenError
 
 import logging
-log = logging.getLogger(__name__)
+log = logging.getLogger('recommendpy')
+
+
+REFRESH_LIFETIME_PERCENT = 50
+
+
+def get_current_timestamp():
+    return datetime.utcnow().replace(tzinfo=timezone.utc).timestamp()
 
 
 class RecommendAPIToken(object):
     """RecommendAPIToken object."""
 
-    REFRESH_LIFETIME_PERCENT = 50
-
     def __init__(self, token=None, expire_at=None, created_at=None):
         self.token = token
         self.expire_at = expire_at
 
-        self.created_at = created_at or datetime.utcnow().timestamp()
+        self.created_at = created_at or get_current_timestamp()
 
     @property
     def is_expired(self):
-        return datetime.utcnow().timestamp() >= self.expire_at
+        return get_current_timestamp() >= self.expire_at
 
     @property
     def life_time(self):
@@ -28,11 +33,11 @@ class RecommendAPIToken(object):
 
     @property
     def refresh_life_time(self):
-        return self.life_time * self.REFRESH_LIFETIME_PERCENT / 100
+        return self.life_time * REFRESH_LIFETIME_PERCENT / 100
 
     @property
     def need_refresh(self):
-        return datetime.utcnow().timestamp() >= (
+        return get_current_timestamp() >= (
             self.created_at + self.refresh_life_time
         )
 

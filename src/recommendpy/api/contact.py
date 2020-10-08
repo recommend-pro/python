@@ -91,6 +91,54 @@ class ContactBatchAPI(BaseAPI):
 class ContactSegmentAPI(CRUDAPI):
     """Contact segment API."""
 
+    _test_data = {
+        'title': 'test_title'
+    }
+
+    @check_token
+    def search(
+        self, identifier, field=None, identifiers=None, skip=None, limit=None,
+        **kw
+    ):
+        r"""
+        Search data of contact segment.
+
+        :param identifier: identifier of contact segment (required).
+        :param field: name of field to match by identifiers (required).
+            One of ['customer_id', 'email']
+        :param identifiers: list of identifiers (required).
+        :param customer_ids: list of customer_ids. Defaults to ``None``.
+        :param list_code: identifier of contact list. Defaults to ``None``.
+        :param skip: skip documents. Defaults to ``None``.
+        :param limit: Limit documents. Defaults to ``None``.
+        :param \**kw: additional keyword arguments are passed to requests.
+
+        :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
+
+        :return: result of response.json().
+        """
+        data = {}
+        params = {}
+
+        if field and field not in ['customer_id', 'email']:
+            raise RecommendAPIError(
+                'Please send valid `field`'
+            )
+
+        if field:
+            data['field'] = field
+        if skip:
+            params['skip'] = skip
+        if params:
+            params['limit'] = limit
+
+        return self._client.send(
+            'post', self.get_path(
+                identifier=identifier, custom=['identifiers', 'search']
+            ),
+            data=data, params=params, **kw
+        )
+
     @check_token
     def attach(self, identifier, field, identifiers, **kw):
         r"""
@@ -150,6 +198,10 @@ class ContactSegmentAPI(CRUDAPI):
 
 class ContactListAPI(CRUDAPI):
     """Contact list API."""
+
+    _test_data = {
+        'title': 'test_title'
+    }
 
     @check_token
     def attach(

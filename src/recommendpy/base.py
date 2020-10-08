@@ -35,7 +35,7 @@ from .api import (
 from .token import RecommendAPIToken
 
 import logging
-log = logging.getLogger(__name__)
+log = logging.getLogger('recommendpy')
 
 
 class RecommendAPI(object):
@@ -163,7 +163,7 @@ class RecommendAPI(object):
 
         response = getattr(self._session, method)(
             self.service_url(name),
-            verify=False,
+            verify=True,
             **args
         )
 
@@ -197,12 +197,6 @@ class RecommendAPI(object):
         if not data:
             raise RecommendAPIError(response=response)
 
-        try:
-            if data and data['success']:  # asbool(data['success']):
-                return data
-        except KeyError:
-            pass
-
         if data.get('batch_error_list'):
             raise RecommendBatchErrorList(response=response)
 
@@ -213,6 +207,12 @@ class RecommendAPI(object):
                     response=response
                 )
         except (TypeError, KeyError):
+            pass
+
+        try:
+            if data and data['success']:  # asbool(data['success']):
+                return data.get('result') or True
+        except KeyError:
             pass
 
         raise RecommendAPIError(response=response)
