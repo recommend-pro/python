@@ -1,5 +1,4 @@
-from .base import BaseAPI, ReadAPI, check_token
-from ..exceptions import RecommendAPIError
+from .base import BaseAPI, ReadAPI, SearchAPI, check_token
 
 __all__ = [
     'MessagingAPI',
@@ -63,7 +62,7 @@ class MessagingChannelBatchAPI(BaseAPI):
         )
 
 
-class MessagingChannelEmailAPI(ReadAPI):
+class MessagingChannelEmailAPI(ReadAPI, SearchAPI):
     """Messaging Channel Email API."""
 
     @check_token
@@ -111,42 +110,3 @@ class MessagingChannelEmailAPI(ReadAPI):
         return self._client.send(
             'post', self.get_path(method='search'), data, params=params, **kw
         )
-
-    def search_iterator(self, start_skip=0, max_failed=5, **kw):
-        r"""
-        Iterator for :func:`search`.
-
-        :param start_skip: Start ``skip`` parameter to search.
-            Defaults to ``0``.
-        :param max_failed: Max attempts count for one search request.
-            Defaults to ``5``.
-        :param \**kw: additional keyword arguments are passed to
-            :func:`search`.
-
-        :raises: :class:`recommendpy.exceptions.RecommendAPIError`
-            if ``max_failed`` reached.
-
-        :return: generator for search results.
-        :yields: search result
-        """
-        skip = start_skip
-        failed_count = 0
-        limit = 3000
-        while True:
-            try:
-                result = self.search(skip=skip, limit=limit, **kw)
-
-                failed_count = 0
-                if not isinstance(result, dict):
-                    raise RecommendAPIError('Empty result.')
-
-                for item in result.get('data', []):
-                    yield item
-                limit = result.get('limit', 0)
-                if result.get('total', 0) < limit:
-                    break
-                skip += limit
-            except RecommendAPIError as e:
-                failed_count += 1
-                if failed_count > max_failed:
-                    raise e

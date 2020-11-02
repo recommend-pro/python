@@ -1,3 +1,8 @@
+Release 0.0.7: Nov 2, 2020
+
+- add search_iterator to ContactAPI, ContactSegmentAPI
+
+
 Release 0.0.6: Oct 8, 2020
 
 - fix issue with search_iterator

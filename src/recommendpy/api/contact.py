@@ -1,4 +1,4 @@
-from .base import BaseAPI, CRUDAPI, check_token
+from .base import BaseAPI, CRUDAPI, SearchAPI, check_token
 
 from ..exceptions import RecommendAPIError
 
@@ -11,7 +11,7 @@ __all__ = [
 ]
 
 
-class ContactAPI(BaseAPI):
+class ContactAPI(SearchAPI):
     """Contact API."""
 
     @check_token
@@ -88,7 +88,7 @@ class ContactBatchAPI(BaseAPI):
         )
 
 
-class ContactSegmentAPI(CRUDAPI):
+class ContactSegmentAPI(CRUDAPI, SearchAPI):
     """Contact segment API."""
 
     _test_data = {
@@ -97,7 +97,7 @@ class ContactSegmentAPI(CRUDAPI):
 
     @check_token
     def search(
-        self, identifier, field=None, identifiers=None, skip=None, limit=None,
+        self, identifier, field, identifiers=None, skip=None, limit=None,
         **kw
     ):
         r"""
@@ -106,7 +106,7 @@ class ContactSegmentAPI(CRUDAPI):
         :param identifier: identifier of contact segment (required).
         :param field: name of field to match by identifiers (required).
             One of ['customer_id', 'email']
-        :param identifiers: list of identifiers (required).
+        :param identifiers: list of identifiers. Defaults to ``None``.
         :param customer_ids: list of customer_ids. Defaults to ``None``.
         :param list_code: identifier of contact list. Defaults to ``None``.
         :param skip: skip documents. Defaults to ``None``.
@@ -127,6 +127,8 @@ class ContactSegmentAPI(CRUDAPI):
 
         if field:
             data['field'] = field
+        if identifiers:
+            data['identifiers'] = identifiers
         if skip:
             params['skip'] = skip
         if params:
