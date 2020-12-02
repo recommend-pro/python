@@ -160,7 +160,6 @@ class RecommendAPI(object):
         # args = {}
         if data is not None:
             args['data'] = json.dumps(data)
-
         response = getattr(self._session, method)(
             self.service_url(name),
             verify=True,
@@ -196,7 +195,6 @@ class RecommendAPI(object):
 
         if not data:
             raise RecommendAPIError(response=response)
-
         if data.get('batch_error_list'):
             raise RecommendBatchErrorList(response=response)
 
@@ -211,7 +209,7 @@ class RecommendAPI(object):
 
         try:
             if data and data['success']:  # asbool(data['success']):
-                return data.get('result') or True
+                return data.get('result', True)
         except KeyError:
             pass
 

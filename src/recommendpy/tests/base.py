@@ -58,7 +58,10 @@ class BaseEntityItemTestCase(BaseTestCase):
 
     def test_update_item(self):
         """Update item."""
-        self.api_namespace.update(self._id, self.data)
+        data = self.data
+        if hasattr(self.api_namespace, '_test_update_data'):
+            data = self.api_namespace._test_update_data
+        self.api_namespace.update(self._id, data)
 
     def tearDown(self):
         self.api_namespace.delete(self._id)

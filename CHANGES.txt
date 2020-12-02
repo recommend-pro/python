@@ -1,3 +1,10 @@
+Release 0.0.8: Dec 2, 2020
+
+- add new Attribute types
+- fix incorrect function result where response has not attribute 'result'
+- tests for attribute api
+
+
 Release 0.0.7: Nov 2, 2020
 
 - add search_iterator to ContactAPI, ContactSegmentAPI

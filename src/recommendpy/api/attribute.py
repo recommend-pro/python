@@ -7,12 +7,23 @@ __all__ = [
 ]
 
 ATTRIBUTE_TYPES = [
-    'list', 'product', 'variation', 'order', 'order_item', 'contact'
+    'list', 'product', 'variation', 'order', 'order_item', 'contact',
+    'cart', 'cart_item', 'wishlist', 'wishlist_item',
 ]
 
 
 class AttributeAPI(CRUDAPI):
     """Attribute API."""
+
+    _test_data = {
+        'title': 'Test Attribute Title',
+        'type': 'string',
+        'data_type': 'direct',
+    }
+
+    _test_update_data = {
+        'title': 'Test Attribute Updated Title'
+    }
 
     def __init__(self, client, endpoint, entity_type):
         r"""
