@@ -1,3 +1,8 @@
+Release 0.0.9: Dec 7, 2020
+
+- fix incorrect response parsing in RecommendAPIError
+
+
 Release 0.0.8: Dec 2, 2020
 
 - add new Attribute types

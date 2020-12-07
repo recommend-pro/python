@@ -4,17 +4,15 @@ import json
 class RecommendAPIError(Exception):
 
     def __init__(self, message=None, response=None):
-        Exception.__init__(self, response.status_code if response else 0)
+        super().__init__(response.status_code if response else 0)
         self.response = response
         self.message = message
         self.error_code = None
-
-        if self.response:
+        if self.response is not None:
             try:
-                data = response.json()
+                data = self.response.json()
             except json.JSONDecodeError:
                 data = None
-
             if data:
                 if not self.message and data.get('error_message'):
                     self.message = data['error_message']
@@ -33,7 +31,7 @@ class RecommendAPIError(Exception):
     def __unicode__(self):
         if self.response:
             return u'{} {}'.format(
-                self.self.error_code or self.response.status_code,
+                self.error_code or self.response.status_code,
                 self.message or ''
             )
         return self.message or ''
