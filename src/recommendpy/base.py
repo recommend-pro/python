@@ -20,6 +20,7 @@ from .api import (
     MessagingAPI,
     MessagingChannelBatchAPI,
     MessagingChannelEmailAPI,
+    MessagingChannelPushAPI,
     OrderAPI,
     ConfigAPI,
     StoreAPI,
@@ -232,6 +233,9 @@ class RecommendAPI(object):
         )
         self.messaging.channel_email = MessagingChannelEmailAPI(
             self, 'messaging/channel/email'
+        )
+        self.messaging.channel_push = MessagingChannelPushAPI(
+            self, 'messaging/channel/push'
         )
 
         # Order API

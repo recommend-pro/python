@@ -110,3 +110,22 @@ class MessagingChannelEmailAPI(ReadAPI, SearchAPI):
         return self._client.send(
             'post', self.get_path(method='search'), data, params=params, **kw
         )
+
+
+class MessagingChannelPushAPI(SearchAPI):
+    """Messaging Channel Push API."""
+
+    @check_token
+    def search(self, **kw):
+        r"""
+        Search Push Notifications Subscriptions.
+
+        :param \**kw: additional keyword arguments are passed to requests.
+
+        :raises: :class:`recommendpy.exceptions.RecommendAPIError`.
+
+        :return: result of response.json().
+        """
+        return self._client.send(
+            'post', self.get_path(method='search'), **kw
+        )
